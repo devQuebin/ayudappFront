@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Provider } from "@/components/ui/provider";
 import { Flex } from "@chakra-ui/react";
+import Header from "@/components/navigation/Header";
+import Footer from "@/components/navigation/Footer";
 
 const roboto = Roboto({
   weight: "400",
@@ -24,7 +26,9 @@ export default function RootLayout({
       <body className={roboto.className} suppressHydrationWarning>
         <Provider>
           <Flex direction="column" minHeight="100vh">
+            <Header />
             {children}
+            <Footer />
           </Flex>
         </Provider>
       </body>
