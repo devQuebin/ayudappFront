@@ -1,8 +1,13 @@
+import CardCampaign from "@/components/CardCampaign";
 import { Flex } from "@chakra-ui/react";
 import React from "react";
 
 function Campaign() {
-  return <Flex my={100}>Campaign push branch dev</Flex>;
+  return (
+    <Flex my={100}>
+      <CardCampaign />
+    </Flex>
+  );
 }
 
 export default Campaign;

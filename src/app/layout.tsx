@@ -22,10 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html>
       <body className={roboto.className} suppressHydrationWarning>
         <Provider>
-          <Flex direction="column" minHeight="100vh">
+          <Flex direction="column" minHeight="100vh" gap={1}>
             <Header />
             {children}
             <Footer />

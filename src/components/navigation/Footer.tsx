@@ -5,6 +5,7 @@ import React from "react";
 function Footer() {
   return (
     <Flex
+      as="footer"
       bg="black"
       w="100%"
       h={{ base: "30svh", md: "32vmin" }}
@@ -26,9 +27,8 @@ function Footer() {
         gap={2}
       >
         <Text color="white">
-          <Link href="/privacy">Privacy Policy</Link> |{" "}
-          <Link href="/terms">Terms of Service</Link> |{" "}
-          <Link href="cookies">Cookies</Link>
+          <Link href="/privacy">Politicas de privacidad</Link> |{" "}
+          <Link href="/terms">Terminos y condiciones</Link>
         </Text>
       </Flex>
       <Flex
@@ -41,12 +41,12 @@ function Footer() {
         pl={{ base: 0, md: 3 }}
         pt={{ base: 2, md: 0 }}
       >
-        <Text color="white">Product</Text>
+        <Text color="white">Sobre nosotros</Text>
         <Text color="white">
           <Link href="/faqs">FAQ</Link>
         </Text>
         <Text color="white">
-          <Link href="/contactus">Contact</Link>
+          <Link href="/contactus">Contactanos</Link>
         </Text>
       </Flex>
     </Flex>
