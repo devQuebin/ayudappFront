@@ -46,9 +46,11 @@ function Header() {
               <Text>Iniciar sesion</Text>
             </Link>
 
-            <Button bg="blue.600" onClick={login}>
-              Crear cuenta
-            </Button>
+            <Link href="/register">
+              <Button bg="blue.600">
+                Crear cuenta
+              </Button>
+            </Link>
           </>
         )}
       </Flex>
