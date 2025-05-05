@@ -17,3 +17,9 @@ export interface ICampaign {
     nanoseconds: number;
   };
 }
+
+export interface ICampaignResponse {
+  data: ICampaign[];
+  message: string;
+  status: number;
+}
