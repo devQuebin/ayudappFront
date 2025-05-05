@@ -5,11 +5,10 @@ import React from "react";
 function Footer() {
   return (
     <Flex
-      as="footer"
-      bg="black"
+      bg="blue.800"
       w="100%"
       h={{ base: "30svh", md: "32vmin" }}
-      maxH={{ base: "40vh" }}
+      maxH={{ base: "20vh" }}
       minH="fit-content"
       justify={{ base: "center", md: "space-around" }}
       align="flex-end"

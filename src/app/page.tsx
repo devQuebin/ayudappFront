@@ -5,41 +5,48 @@ import {
   Container,
   Heading,
   Stack,
+  Image,
   Text,
   Button,
 } from "@chakra-ui/react";
+import MainBanner from "../../public/img/MainBanner.jpg";
 
 export default function Home() {
   return (
     <Container maxW={"5xl"}>
-      <Stack textAlign={"center"} align={"center"} py={{ base: 20, md: 28 }}>
+      <Stack
+        textAlign={"center"}
+        align={"center"}
+        py={{ base: 20, md: 28 }}
+        gap={8}
+      >
+        <Image src={MainBanner.src} alt="main banner" rounded={"lg"} />
         <Heading
           fontWeight={600}
           fontSize={{ base: "3xl", sm: "4xl", md: "6xl" }}
           lineHeight={"110%"}
         >
-          Meeting scheduling{" "}
-          <Text as={"span"} color={"orange.400"}>
-            made easy
+          Bienvenidos a{" "}
+          <Text as={"span"} color={"blue.400"}>
+            AyudApp
           </Text>
         </Heading>
         <Text color={"gray.500"} maxW={"3xl"}>
-          Never miss a meeting. Never be late for one too. Keep track of your
-          meetings and receive smart reminders in appropriate times. Read your
-          smart “Daily Agenda” every morning.
+          Comparti y enterate sobre las campañas de donaciones de manera rápida
+          y sencilla. ¡Logremos que tu causa llegue a todos y que la ayuda
+          llegue hasta el último rincón!
         </Text>
         <Stack direction={"row"}>
           <Button
             rounded={"full"}
             px={6}
-            colorScheme={"orange"}
-            bg={"orange.400"}
-            _hover={{ bg: "orange.500" }}
+            bg={"blue.600"}
+            _hover={{ bg: "blue.500" }}
           >
-            Get started
+            Crear una campaña
           </Button>
-          <Button rounded={"full"} px={6}>
-            Learn more
+          <Button variant="outline" colorPalette="blue" rounded={"full"} px={6}>
+            Leer más
           </Button>
         </Stack>
         <Flex w={"full"}></Flex>
