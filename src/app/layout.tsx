@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+"use client";
 import { Roboto } from "next/font/google";
 import { Provider } from "@/components/ui/provider";
 import { Flex } from "@chakra-ui/react";
@@ -11,11 +11,6 @@ const roboto = Roboto({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Ayudapp",
-  description: "Ayuda comunitaria",
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -27,7 +22,9 @@ export default function RootLayout({
         <Provider>
           <Flex direction="column" minHeight="100vh" gap={1}>
             <Header />
-            {children}
+            <Flex mt={4} as="main" flex="1" direction="column">
+              {children}
+            </Flex>
             <Footer />
           </Flex>
         </Provider>
