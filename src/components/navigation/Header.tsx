@@ -32,7 +32,7 @@ function Header() {
       </Link>
 
       <Flex gap={5} justify="flex-end" align="center">
-        <Link href="/miscampanas">
+        <Link href="/campaign">
           <Text>Mis campañas</Text>
         </Link>
 
