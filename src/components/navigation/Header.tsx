@@ -32,7 +32,7 @@ function Header() {
       </Link>
 
       <Flex gap={5} justify="flex-end" align="center">
-        <Link href="/miscampanas">
+        <Link href="/campaign">
           <Text>Mis campañas</Text>
         </Link>
 
@@ -46,13 +46,16 @@ function Header() {
               <Text>Iniciar sesion</Text>
             </Link>
 
-            <Button bg="blue.600" onClick={login}>
-              Crear cuenta
-            </Button>
+            <Link href="/register">
+              <Button bg="blue.600">
+                Crear cuenta
+              </Button>
+            </Link>
           </>
-        )}
-      </Flex>
-    </Flex>
+        )
+        }
+      </Flex >
+    </Flex >
   );
 }
 export default Header;
