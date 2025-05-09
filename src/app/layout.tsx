@@ -22,7 +22,7 @@ export default function RootLayout({
         <Provider>
           <Flex direction="column" minHeight="100vh" gap={1}>
             <Header />
-            <Flex mt={4} as="main" flex="1" direction="column">
+            <Flex mt={20} as="main" flex="1" direction="column">
               {children}
             </Flex>
             <Footer />
