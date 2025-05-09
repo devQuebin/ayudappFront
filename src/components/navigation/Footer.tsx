@@ -1,6 +1,7 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Image } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
+import FooterLogo from "../../../public/img/whitelogo.png";
 
 function Footer() {
   return (
@@ -25,6 +26,7 @@ function Footer() {
         mt={{ base: 0, md: 3 }}
         gap={2}
       >
+        <Image src={FooterLogo.src} h="8vmin" alt="AyudApp logo" />
         <Text color="white">
           <Link href="/privacy">Politicas de privacidad</Link> |{" "}
           <Link href="/terms">Terminos y condiciones</Link>

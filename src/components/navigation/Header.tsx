@@ -3,7 +3,7 @@
 import { Button, Flex, Text, Image } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
-import HeaderLogo from "../../../public/img/ayudapplogoHeader.png";
+import HeaderLogo from "../../../public/img/blacklogo.png";
 
 function Header() {
   const [isLogedin, setIsLogedin] = useState<boolean>(false);
@@ -47,15 +47,12 @@ function Header() {
             </Link>
 
             <Link href="/register">
-              <Button bg="blue.600">
-                Crear cuenta
-              </Button>
+              <Button bg="blue.600">Crear cuenta</Button>
             </Link>
           </>
-        )
-        }
-      </Flex >
-    </Flex >
+        )}
+      </Flex>
+    </Flex>
   );
 }
 export default Header;
