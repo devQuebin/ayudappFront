@@ -1,5 +1,6 @@
 'use client'
 
+import { registerUser } from "@/services/auth"
 import {
   Button,
   Field,
@@ -13,8 +14,6 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 interface FormValues {
-  firstName: string
-  lastName: string
   email: string
   password: string
 }
@@ -33,28 +32,13 @@ export default function RegisterForm() {
     setSuccessMessage(null)
     setErrorMessage(null)
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/user`
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to register')
-        }
-        return response.json()
-      })
-      .then((result) => {
-        console.log('Registration successful:', result)
-        setSuccessMessage('Registration successful!')
-      })
-      .catch((error) => {
-        console.error('Error during registration:', error)
-        setErrorMessage('Error during registration. Please try again.')
-      })
+    try {
+      registerUser(data.email, data.password)
+      setSuccessMessage("User registered successfully!")
+    } catch (error) {
+      console.log(error)
+      setErrorMessage("Failed to register user. Please try again.")
+    }
   })
 
   return (
@@ -65,17 +49,6 @@ export default function RegisterForm() {
         </Stack>
 
         <Fieldset.Content>
-          <Field.Root required invalid={!!errors.firstName}>
-            <Field.Label>Nombre <Field.RequiredIndicator /></Field.Label>
-            <Input {...register("firstName", { required: "This field is required" })} />
-            <Field.ErrorText>{errors.firstName?.message}</Field.ErrorText>
-          </Field.Root>
-
-          <Field.Root required invalid={!!errors.lastName}>
-            <Field.Label>Apellido <Field.RequiredIndicator /></Field.Label>
-            <Input {...register("lastName", { required: "This field is required" })} />
-            <Field.ErrorText>{errors.lastName?.message}</Field.ErrorText>
-          </Field.Root>
 
           <Field.Root required invalid={!!errors.email}>
             <Field.Label>Email <Field.RequiredIndicator /></Field.Label>

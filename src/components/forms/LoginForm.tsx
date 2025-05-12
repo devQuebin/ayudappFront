@@ -1,5 +1,6 @@
 'use client'
 
+import { login } from "@/services/auth"
 import {
   Button,
   Field,
@@ -27,8 +28,18 @@ export default function LoginForm() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
+  const onSubmit = handleSubmit(async (data) => {
+    setSuccessMessage(null)
+    setErrorMessage(null)
+    try {
+      await login(data.email, data.password)
+      setSuccessMessage("Login successful!")
+      setErrorMessage(null)
+    } catch (error) {
+      console.log(error)
+      setErrorMessage("Login failed. Please check your credentials.")
+      setSuccessMessage(null)
+    }
   })
 
   return (

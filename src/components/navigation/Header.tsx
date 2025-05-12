@@ -4,17 +4,33 @@ import { Button, Flex, Text, Image } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import HeaderLogo from "../../../public/img/blacklogo.png";
+import { deleteUserFromCookie, getUserFromCookie } from "@/services/auth";
+import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
 function Header() {
   const [isLogedin, setIsLogedin] = useState<boolean>(false);
 
-  function login() {
-    if (isLogedin) {
-      setIsLogedin(false);
-      console.log(isLogedin);
-    } else setIsLogedin(true);
-    console.log(isLogedin);
+  const logout = async () => {
+    await deleteUserFromCookie();
+    setIsLogedin(false);
+    redirect("/");
   }
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await getUserFromCookie();
+
+      if (token) {
+        setIsLogedin(true);
+      } else {
+        setIsLogedin(false);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
   return (
     <Flex
       h="9vh"
@@ -37,7 +53,7 @@ function Header() {
         </Link>
 
         {isLogedin ? (
-          <Button bg="blue.600" onClick={login}>
+          <Button bg="blue.600" onClick={logout}>
             Cerrar sesion
           </Button>
         ) : (
