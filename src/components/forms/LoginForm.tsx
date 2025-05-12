@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -24,6 +25,7 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>()
+  const router = useRouter()
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -35,6 +37,7 @@ export default function LoginForm() {
       await login(data.email, data.password)
       setSuccessMessage("Login successful!")
       setErrorMessage(null)
+      router.push("/")
     } catch (error) {
       console.log(error)
       setErrorMessage("Login failed. Please check your credentials.")

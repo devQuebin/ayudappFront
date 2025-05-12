@@ -22,10 +22,9 @@ export const login = async (
   }
 
   const data = await response.json()
-
+  console.log(data)
   ;(await cookieStore).set("token", data.token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
     path: "/",
   })
 
