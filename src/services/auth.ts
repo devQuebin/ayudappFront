@@ -20,10 +20,13 @@ export const login = async (
   if (!response.ok) {
     throw new Error("Login failed")
   }
-
   const data = await response.json()
   console.log(data)
   ;(await cookieStore).set("token", data.token, {
+    httpOnly: true,
+    path: "/",
+  })
+  ;(await cookieStore).set("uid", data.uid, {
     httpOnly: true,
     path: "/",
   })
@@ -57,7 +60,14 @@ export const getUserFromCookie = async () => {
   return userToken?.value || null
 }
 
+export const getUidFromCookie = async () => {
+  const cookieStore = cookies()
+  const userId = (await cookieStore).get("uid")
+  return userId?.value || null
+}
+
 export const deleteUserFromCookie = async () => {
   const cookieStore = cookies()
   ;(await cookieStore).delete("token")
+  ;(await cookieStore).delete("uid")
 }

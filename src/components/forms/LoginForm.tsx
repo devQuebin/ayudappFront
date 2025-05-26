@@ -37,7 +37,9 @@ export default function LoginForm() {
       await login(data.email, data.password)
       setSuccessMessage("Login successful!")
       setErrorMessage(null)
+      // Force page reload while navigating
       router.push("/")
+      window.location.href = "/"
     } catch (error) {
       console.log(error)
       setErrorMessage("Login failed. Please check your credentials.")

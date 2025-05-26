@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import {
   Box,
@@ -115,3 +115,4 @@ export default function Navbar() {
     </>
   );
 }
+ */

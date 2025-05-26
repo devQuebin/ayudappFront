@@ -19,7 +19,30 @@ export interface ICampaign {
 }
 
 export interface ICampaignResponse {
-  data: ICampaign[];
+  data: Campaign[];
+  message: string;
+  status: number;
+}
+
+// Interfaz para nuestro formulario y API
+export interface Campaign {
+  id?: string;
+  createdAt?: string
+  updatedAt?: string;
+  startDate: string;
+  endDate: string;
+  dueDate: string;
+  name: string;
+  description: string;
+  images: string[];
+  categories: string[];
+  amountTarget: number;
+  ownerId: string;
+  status: string;
+}
+
+export interface CampaignResponse {
+  data: Campaign;
   message: string;
   status: number;
 }

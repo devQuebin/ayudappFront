@@ -5,11 +5,14 @@ import {
   ColorModeProvider,
   type ColorModeProviderProps,
 } from "./color-mode"
+import { ClientOnly } from "@chakra-ui/react"
 
 export function Provider(props: ColorModeProviderProps) {
   return (
-    <ChakraProvider value={defaultSystem}>
-      <ColorModeProvider {...props} />
+    <ChakraProvider value={defaultSystem} >
+      <ClientOnly fallback={<div style={{ visibility: "hidden" }} />}>
+        <ColorModeProvider {...props} />
+      </ClientOnly>
     </ChakraProvider>
   )
 }

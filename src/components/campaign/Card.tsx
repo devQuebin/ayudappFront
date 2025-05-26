@@ -1,75 +1,187 @@
-import { ICampaign } from "@/interfaces/ICampaign.interface";
-import { Box, Image, Text, Stack, Button } from "@chakra-ui/react";
+"use client"
+import { Campaign } from "@/interfaces/ICampaign.interface";
+import { Box, Image, Text, Stack, Button, HStack, useDisclosure, Dialog, Flex } from "@chakra-ui/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import CategoryBadge from "@/components/ui/CategoryBadge";
 
+interface CardProps extends Campaign {
+  currentUserId?: string | null;
+}
 
 const Card = ({
   id,
-  amount_target,
-  created_at,
+  amountTarget,
+  createdAt,
   description,
-  due_date,
-  end_date,
+  dueDate,
+  endDate,
   name,
-  owner_id,
-  start_date,
+  ownerId,
+  startDate,
   status,
-  updated_at,
-}: ICampaign) => {
-  const parsedDate = new Date(created_at.seconds * 1000);
-  const formattedDate = parsedDate.toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const formattedTime = parsedDate.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  const formattedDateTime = `${formattedDate} ${formattedTime}`;
-  const getRandomImage = () => {
-    const randomIndex = Math.floor(Math.random() * 5) + 1;
-    return `/img/campaigns/${randomIndex}.jpeg`;
+  currentUserId,
+  images,
+  categories
+}: CardProps) => {
+  console.log("images", images);
+  const [isOwner, setIsOwner] = useState(false);
+  const { open, onOpen, onClose } = useDisclosure();
+  // Default image path
+  const [campaignImage, setCampaignImage] = useState<string>('/img/campaigns/1.jpeg');
+
+  useEffect(() => {
+    // Set ownership directly from the passed currentUserId
+    setIsOwner(currentUserId === ownerId);
+
+    // If there's at least one image in the images array, use it
+    if (images && images.length > 0 && images[0]) {
+      setCampaignImage(images[0]);
+    } else {
+      // Otherwise use a random image as fallback
+      const getRandomImage = () => {
+        const randomIndex = Math.floor(Math.random() * 5) + 1;
+        return `/img/campaigns/${randomIndex}.jpeg`;
+      };
+
+      setCampaignImage(getRandomImage());
+    }
+  }, [currentUserId, ownerId, images]);
+
+  // Helper function to format dates consistently between server and client
+  const formatDate = (date: string | Date) => {
+    if (!date) return "No disponible";
+    // Use ISO format for consistent rendering
+    const d = new Date(date);
+    return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
   };
 
-  const campaignImage = getRandomImage();
   return (
-    <Box
+    <Flex
+      direction="column"
+      justifyContent={"space-between"}
       maxW="sm"
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
       boxShadow="md"
       p={4}
+      position="relative"
     >
+      {isOwner && (
+        <Link href={`/campaign/edit/${id}`} passHref>
+          <Button
+            size="sm"
+            colorScheme="blue"
+            position="absolute"
+            top={2}
+            right={2}
+            zIndex={1}
+          >
+            Editar
+          </Button>
+        </Link>
+      )}
+
       <Image
         src={campaignImage}
         alt={name}
         borderRadius="md"
+        onClick={onOpen}
+        cursor="pointer"
+        onError={() => setCampaignImage('/img/campaigns/1.jpeg')}
       />
+
       <Stack mt={4}>
-        <Text fontWeight="bold" fontSize="lg">
-          {name}
-        </Text>
-        <Text fontSize="sm" color="gray.600">
+        <Flex align="center" mt={1} gap={2}>
+          <Text fontWeight="bold" fontSize="lg">
+            {name}
+          </Text>
+          <Box
+            w="10px"
+            h="10px"
+            borderRadius="full"
+            bg={status === "active" ? "green.500" : "red.500"}
+            mr={2}
+          />
+        </Flex>
+        {/* Display categories */}
+        {categories && categories.length > 0 && (
+          <Flex wrap="wrap" gap={1} mt={1}>
+            {categories.map((category, index) => (
+              <CategoryBadge key={index} category={category} />
+            ))}
+          </Flex>
+        )}
+
+        <Text fontSize="sm" color="gray.600" >
           {description}
         </Text>
-        <Text fontSize="sm" color="gray.500">
-          Meta: ${amount_target}
+        <Text fontSize="sm" color="gray.500" fontWeight="bold">
+          Meta: ${amountTarget}
         </Text>
         <Text fontSize="xs" color="gray.400">
-          Creado el: {new Date(formattedDateTime).toLocaleDateString()}
+          Creado el: {formatDate(createdAt!)}
         </Text>
         <Text fontSize="xs" color="gray.400">
-          Fecha de inicio: {new Date(start_date).toLocaleDateString()}
+          Fecha de inicio: {formatDate(startDate)}
         </Text>
         <Text fontSize="xs" color="gray.400">
-          Fecha de fin: {new Date(due_date).toLocaleDateString()}
+          Fecha de fin: {formatDate(endDate)}
         </Text>
-        <Button colorScheme="teal" size="sm" mt={2}>
-          Donar
-        </Button>
+        <HStack gap={2} mt={"auto"}>
+          <Button colorScheme="teal" size="sm" flexGrow={1}>
+            Donar
+          </Button>
+          <Button colorScheme="gray" size="sm" onClick={onOpen}>
+            Ver más
+          </Button>
+        </HStack>
       </Stack>
-    </Box>
+
+      {/* Dialog con detalles completos */}
+      <Dialog.Root open={open} onOpenChange={onClose}>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content maxW="lg">
+            <Dialog.Header>
+              <Dialog.Title>{name}</Dialog.Title>
+              <Dialog.CloseTrigger />
+            </Dialog.Header>
+            <Dialog.Body pb={6}>
+              <Image
+                src={campaignImage}
+                alt={name}
+                borderRadius="md"
+                mb={4}
+              />              {/* Display categories in dialog */}
+              {categories && categories.length > 0 && (
+                <Flex wrap="wrap" gap={2} mb={3}>
+                  {categories.map((category, index) => (
+                    <CategoryBadge key={index} category={category} />
+                  ))}
+                </Flex>
+              )}
+
+              <Text mb={4}>{description}</Text>
+              <Stack gap={2}>
+                <Text fontWeight="bold">Meta: ${amountTarget}</Text>
+                <Text>Estado: {status === "active" ? "Activa" : "Inactiva"}</Text>
+                <Text>Fecha de inicio: {formatDate(startDate)}</Text>
+                <Text>Fecha de fin: {formatDate(endDate)}</Text>
+                <Text>Fecha límite: {formatDate(dueDate)}</Text>
+                <Text>Creado el: {formatDate(createdAt!)}</Text>
+              </Stack>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Button colorScheme="teal" w="full">
+                Donar a esta campaña
+              </Button>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Dialog.Root>
+    </Flex>
   );
 };
 
