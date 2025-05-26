@@ -1,0 +1,16 @@
+/* Estilos globales para la aplicación */
+
+/* Modificación específica para el modo oscuro */
+.chakra-theme.dark {
+  --chakra-colors-bg-default: #2d2d2d !important; /* Un negro más claro/suave */
+}
+
+/* O si la clase anterior no funciona, podemos usar la clase que proporciona next-themes */
+html.dark body {
+  background-color: #2d2d2d !important;
+}
+
+/* Transición suave para cambios de tema */
+body {
+  transition: background-color 0.3s ease;
+}

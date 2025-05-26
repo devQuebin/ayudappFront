@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1",
+    "dni": "30123456",
+    "titulo": "Ayuda para cirugía de corazón",
+    "breveDescripcion": "Niño necesita operación urgente",
+    "descripcion": "Tomás, de 8 años, requiere una cirugía de corazón en el Hospital Italiano. La familia no puede afrontar los costos.",
+    "fechaInicio": "2025-05-01",
+    "fechaFinalizacion": "2025-06-15",
+    "estado": "activo",
+    "meta": 500000,
+    "recaudado": 125000,
+    "categoria": "salud",
+    "autorId": "user_001"
+  },
+  {
+    "id": "2",
+    "dni": "32765432",
+    "titulo": "Reforestación en el Parque Nacional",
+    "breveDescripcion": "Campaña para plantar 10.000 árboles",
+    "descripcion": "Buscamos restaurar el ecosistema nativo del Parque Nacional Lanín. Cada árbol cuesta alrededor de $100.",
+    "fechaInicio": "2025-04-10",
+    "fechaFinalizacion": "2025-07-10",
+    "estado": "activo",
+    "meta": 1000000,
+    "recaudado": 450000,
+    "categoria": "medio ambiente",
+    "autorId": "user_002"
+  },
+  {
+    "id": "3",
+    "dni": "29876543",
+    "titulo": "Material escolar para comunidades rurales",
+    "breveDescripcion": "Útiles para 200 niños del NOA",
+    "descripcion": "Queremos entregar mochilas completas con cuadernos, lápices y más a escuelas rurales del norte argentino.",
+    "fechaInicio": "2025-05-05",
+    "fechaFinalizacion": "2025-06-30",
+    "estado": "pendiente",
+    "meta": 200000,
+    "recaudado": 0,
+    "categoria": "educacion",
+    "autorId": "user_003"
+  },
+  {
+    "id": "4",
+    "dni": "31234567",
+    "titulo": "Sillas de ruedas para el hogar San Juan",
+    "breveDescripcion": "Renovación del equipamiento",
+    "descripcion": "El hogar San Juan de Dios necesita 15 sillas de ruedas nuevas para sus residentes con movilidad reducida.",
+    "fechaInicio": "2025-03-20",
+    "fechaFinalizacion": "2025-05-20",
+    "estado": "finalizado",
+    "meta": 300000,
+    "recaudado": 305000,
+    "categoria": "institucional",
+    "autorId": "user_004"
+  },
+  {
+    "id": "5",
+    "dni": "33456789",
+    "titulo": "Talleres de robótica para jóvenes",
+    "breveDescripcion": "Acercamos la tecnología a adolescentes",
+    "descripcion": "Vamos a brindar talleres gratuitos de robótica y programación en barrios vulnerables de Buenos Aires.",
+    "fechaInicio": "2025-06-01",
+    "fechaFinalizacion": "2025-08-15",
+    "estado": "rechazado",
+    "meta": 150000,
+    "recaudado": 0,
+    "categoria": "educacion",
+    "autorId": "user_005"
+  }
+]
