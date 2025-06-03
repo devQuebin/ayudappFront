@@ -1,17 +1,34 @@
 "use client"
 
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
-import {
-  ColorModeProvider,
-  type ColorModeProviderProps,
-} from "./color-mode"
+import { ThemeProvider, type Attribute } from "next-themes"
 import { ClientOnly } from "@chakra-ui/react"
+import * as React from "react"
 
-export function Provider(props: ColorModeProviderProps) {
+interface ProviderProps {
+  children: React.ReactNode
+  defaultTheme?: string
+  attribute?: Attribute | Attribute[]
+  enableSystem?: boolean
+}
+
+export function Provider({
+  children,
+  defaultTheme = "system",
+  attribute = "class",
+  enableSystem = true,
+}: ProviderProps) {
   return (
-    <ChakraProvider value={defaultSystem} >
+    <ChakraProvider value={defaultSystem}>
       <ClientOnly fallback={<div style={{ visibility: "hidden" }} />}>
-        <ColorModeProvider {...props} />
+        <ThemeProvider
+          attribute={attribute}
+          defaultTheme={defaultTheme}
+          enableSystem={enableSystem}
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </ClientOnly>
     </ChakraProvider>
   )

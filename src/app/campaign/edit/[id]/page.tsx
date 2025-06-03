@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { getUserFromCookie } from "@/services/auth"
-import { getCampaignById } from "@/services/campaign"
+import { getCampaignById } from "@/services/actions"
 import CampaignForm from "@/components/forms/CampaignForm"
 import { Box, Container, Text } from "@chakra-ui/react"
 

@@ -12,7 +12,7 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import MainBanner from "../../public/img/MainBanner.jpg";
-import { getCampaigns } from "@/services/campaign";
+import { getCampaigns } from "@/services/client/campaign";
 import FeaturedCampaign from "@/components/campaign/FeaturedCampaign";
 import { useEffect, useState } from "react";
 import { Campaign } from "@/interfaces/ICampaign.interface";
@@ -27,7 +27,6 @@ export default function Home() {
       try {
         setIsLoading(true);
         const response = await getCampaigns();
-        // Filtrar solo campañas activas y limitar a 3
         const activeCampaigns = response.data
           .filter(campaign => campaign.status === "active")
           .slice(0, 3);

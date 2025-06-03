@@ -2,7 +2,7 @@
 import React, { useState } from "react"
 import { Campaign } from "@/interfaces/ICampaign.interface"
 import { useRouter } from "next/navigation"
-import { createCampaign, updateCampaign } from "@/services/campaign"
+import { createCampaign, updateCampaign } from "@/services/actions"
 import {
   Button,
   Field,

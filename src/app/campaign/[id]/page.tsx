@@ -1,4 +1,4 @@
-import { getCampaignById } from "@/services/campaign";
+import { getCampaignById } from "@/services/actions";
 import { Campaign, CampaignResponse } from "@/interfaces/ICampaign.interface";
 import {
   Box,

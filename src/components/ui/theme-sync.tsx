@@ -11,32 +11,15 @@ export function useThemeSync() {
   useEffect(() => {
     setIsMounted(true);
 
-    // Get theme from localStorage or system preference
-    const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const theme = savedTheme || systemTheme;
+    // Only run theme sync on client
+    if (typeof window === 'undefined') return;
 
-    // Apply theme attributes to HTML element
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.style.colorScheme = 'light';
-    }
-
-    // Set up a listener for system preference changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
+      // Only apply system preference if no theme is set in localStorage
       if (!localStorage.getItem('theme')) {
-        const newTheme = e.matches ? 'dark' : 'light';
-        if (newTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-          document.documentElement.style.colorScheme = 'dark';
-        } else {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.style.colorScheme = 'light';
-        }
+        document.documentElement.classList.toggle('dark', e.matches);
+        document.documentElement.style.colorScheme = e.matches ? 'dark' : 'light';
       }
     };
 

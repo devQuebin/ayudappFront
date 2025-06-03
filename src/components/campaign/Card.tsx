@@ -81,14 +81,15 @@ const Card = ({
             Editar
           </Button>
         </Link>
-      )}
-
-      <Image
+      )}      <Image
         src={campaignImage}
         alt={name}
         borderRadius="md"
         onClick={onOpen}
         cursor="pointer"
+        loading="lazy"
+        width={300}
+        height={200}
         onError={() => setCampaignImage('/img/campaigns/1.jpeg')}
       />
 

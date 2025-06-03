@@ -5,7 +5,7 @@ import { ICampaignResponse } from "@/interfaces/ICampaign.interface";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { getUserFromCookie, getUidFromCookie } from "@/services/auth";
-import { getCampaigns } from "@/services/campaign";
+import { getCampaigns } from "@/services/actions";
 import { filterCampaigns, paginateCampaigns, getUniqueCategories } from "@/lib/campaign-utils";
 
 export default async function Campaign(
@@ -23,15 +23,13 @@ export default async function Campaign(
   const query = params?.query || '';
   const category = params?.category || '';
   const currentPage = Number(params?.page) || 1;
-  const limit = Number(params?.limit) || 9;
-
-  // Obtener datos de campañas y usuario
+  const limit = Number(params?.limit) || 9;  // Obtener datos de campañas y usuario
   const campaignsResponse: ICampaignResponse = await getCampaigns();
   const token = await getUserFromCookie();
   const uid = await getUidFromCookie();
   const isAuthenticated = !!token;
 
-  // Obtener todas las categorías únicas
+  // Obtener todas las categorías únicas - esto podría moverse a un endpoint separado para mejor rendimiento
   const allCategories = getUniqueCategories(campaignsResponse.data);
 
   // Filtrar campañas según los parámetros de búsqueda
