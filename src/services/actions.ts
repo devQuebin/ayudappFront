@@ -57,7 +57,7 @@ export async function createCampaign(campaign: Campaign): Promise<Campaign> {
   const response = await fetch(`${API_URL}/campaign`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json", 
+      "Content-Type": "application/json",
       "Authorization": `Bearer ${token.value}`
     },
     body: JSON.stringify(campaign),
@@ -80,7 +80,7 @@ export async function updateCampaign(campaignId: string, campaign: Campaign): Pr
   }
 
   campaign.status = campaign.status || "active";
-  
+
   const { id, createdAt, updatedAt, ...campaignDataToSend } = campaign;
 
   if (typeof campaignDataToSend.amountTarget === "string") {
@@ -88,7 +88,7 @@ export async function updateCampaign(campaignId: string, campaign: Campaign): Pr
   }
 
   const response = await fetch(`${API_URL}/campaign/${campaignId}`, {
-    method: "PUT",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token.value}`
