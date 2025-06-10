@@ -1,9 +1,11 @@
 "use client"
 import { Campaign } from "@/interfaces/ICampaign.interface";
-import { Box, Image, Text, Stack, Button, HStack, useDisclosure, Dialog, Flex } from "@chakra-ui/react";
+import { Box, Image, Text, Stack, Button, HStack, useDisclosure, Dialog, Flex, Progress } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CategoryBadge from "@/components/ui/CategoryBadge";
+import PaymentModal from "@/components/donations/PaymentModal";
+import { useDonation } from "@/hooks/useDonation";
 
 interface CardProps extends Campaign {
   currentUserId?: string | null;
@@ -24,12 +26,22 @@ const Card = ({
   images,
   categories
 }: CardProps) => {
-  console.log("images", images);
-  const [isOwner, setIsOwner] = useState(false);
+  console.log("images", images); const [isOwner, setIsOwner] = useState(false);
   const { open, onOpen, onClose } = useDisclosure();
+  const { open: donationOpen, onOpen: onDonationOpen, onClose: onDonationClose } = useDisclosure();
   // Default image path
   const [campaignImage, setCampaignImage] = useState<string>('/img/campaigns/1.jpeg');
+  const [totalRaised, setTotalRaised] = useState<number>(0);
+  const { getCampaignTotalRaised } = useDonation();
 
+  const handleDonateClick = () => {
+    if (!currentUserId) {
+      // Redirigir al login si no está autenticado
+      window.location.href = '/login?message=Debes iniciar sesión para realizar una donación';
+      return;
+    }
+    onDonationOpen();
+  };
   useEffect(() => {
     // Set ownership directly from the passed currentUserId
     setIsOwner(currentUserId === ownerId);
@@ -45,8 +57,20 @@ const Card = ({
       };
 
       setCampaignImage(getRandomImage());
-    }
-  }, [currentUserId, ownerId, images]);
+    }    // Load total raised for this campaign
+    const loadTotalRaised = async () => {
+      if (!id) return;
+      try {
+        const total = await getCampaignTotalRaised(id);
+        setTotalRaised(total);
+      } catch (error) {
+        console.error('Error loading total raised:', error);
+        setTotalRaised(0);
+      }
+    };
+
+    loadTotalRaised();
+  }, [currentUserId, ownerId, images, id, getCampaignTotalRaised]);
 
   // Helper function to format dates consistently between server and client
   const formatDate = (date: string | Date) => {
@@ -113,13 +137,25 @@ const Card = ({
               <CategoryBadge key={index} category={category} />
             ))}
           </Flex>
-        )}
-
-        <Text fontSize="sm" color="gray.600" >
+        )}        <Text fontSize="sm" color="gray.600" >
           {description}
         </Text>
         <Text fontSize="sm" color="gray.500" fontWeight="bold">
           Meta: ${amountTarget}
+        </Text>
+        <Text fontSize="sm" color="green.600" fontWeight="bold">
+          Recaudado: ${totalRaised}
+        </Text>        <Progress.Root
+          value={(totalRaised / amountTarget) * 100}
+          size="sm"
+          colorPalette="green"
+        >
+          <Progress.Track>
+            <Progress.Range />
+          </Progress.Track>
+        </Progress.Root>
+        <Text fontSize="xs" color="gray.500">
+          {((totalRaised / amountTarget) * 100).toFixed(1)}% completado
         </Text>
         <Text fontSize="xs" color="gray.400">
           Creado el: {formatDate(createdAt!)}
@@ -129,9 +165,8 @@ const Card = ({
         </Text>
         <Text fontSize="xs" color="gray.400">
           Fecha de fin: {formatDate(endDate)}
-        </Text>
-        <HStack gap={2} mt={"auto"}>
-          <Button colorScheme="teal" size="sm" flexGrow={1}>
+        </Text>        <HStack gap={2} mt={"auto"}>
+          <Button colorScheme="teal" size="sm" flexGrow={1} onClick={handleDonateClick}>
             Donar
           </Button>
           <Button colorScheme="gray" size="sm" onClick={onOpen}>
@@ -173,15 +208,21 @@ const Card = ({
                 <Text>Fecha límite: {formatDate(dueDate)}</Text>
                 <Text>Creado el: {formatDate(createdAt!)}</Text>
               </Stack>
-            </Dialog.Body>
-            <Dialog.Footer>
-              <Button colorScheme="teal" w="full">
+            </Dialog.Body>            <Dialog.Footer>
+              <Button colorScheme="teal" w="full" onClick={handleDonateClick}>
                 Donar a esta campaña
               </Button>
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
-      </Dialog.Root>
+      </Dialog.Root>      {/* Modal de Donación */}
+      <PaymentModal
+        isOpen={donationOpen}
+        onClose={onDonationClose}
+        campaignId={id || ''}
+        campaignName={name}
+        userId={currentUserId}
+      />
     </Flex>
   );
 };
