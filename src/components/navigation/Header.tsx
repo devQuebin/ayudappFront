@@ -53,9 +53,16 @@ function Header() {
         </Link>
 
         {isLogedin ? (
-          <Button bg="blue.600" onClick={logout}>
+          <>
+            <Link href="/profile">
+              <Text>Mi perfil</Text>
+            </Link>
+
+            <Button bg="blue.600" onClick={logout}>
             Cerrar sesion
-          </Button>
+            </Button>
+          </>
+          
         ) : (
           <>
             <Link href="/login">

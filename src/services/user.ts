@@ -1,0 +1,55 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+export const getUserData = async (uid: string) => {
+  const response = await fetch(`${API_URL}/user/${uid}`)
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.message || "No se pudo obtener el perfil")
+  }
+  return await response.json()
+}
+
+export const updateUserData = async (uid: string, data: { name: string, lastName: string }) => {
+  const response = await fetch(`${API_URL}/user/${uid}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.message || "Error al actualizar los datos")
+  }
+}
+
+export const updatePassword = async (uid: string, newPassword: string) => {
+  const response = await fetch(`${API_URL}/user/${uid}/password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password: newPassword }),
+  })
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.message || "Error al cambiar la contraseña")
+  }
+
+  
+}
+
+export const getCurrentUser = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+    method: "GET",
+    credentials: "include", //permite enviar cookies
+  })
+
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.message || "Error al obtener el usuario")
+  }
+
+  return await response.json() // { uid, name, lastName, email, ... }
+}
+
