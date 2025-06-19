@@ -39,17 +39,27 @@ export const updatePassword = async (uid: string, newPassword: string) => {
   
 }
 
-export const getCurrentUser = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
-    method: "GET",
-    credentials: "include", //permite enviar cookies
-  })
 
-  if (!response.ok) {
-    const error = await response.json()
-    throw new Error(error.message || "Error al obtener el usuario")
+export const getCurrentUser = async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw new Error("Token no encontrado");
   }
 
-  return await response.json() // { uid, name, lastName, email, ... }
-}
+  const response = await fetch(`${API_URL}/user/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "No se pudo obtener el usuario");
+  }
+
+  return await response.json(); // { uid, email, name, lastName }
+};
+
 

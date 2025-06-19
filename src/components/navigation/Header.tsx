@@ -2,34 +2,25 @@
 
 import { Button, Flex, Text, Image } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderLogo from "../../../public/img/whitelogo.png";
-import { deleteUserFromCookie, getUserFromCookie } from "@/services/auth";
-import { useEffect } from "react";
 import { redirect } from "next/navigation";
 
 function Header() {
   const [isLogedin, setIsLogedin] = useState<boolean>(false);
+  
 
-  const logout = async () => {
-    await deleteUserFromCookie();
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("uid");
     setIsLogedin(false);
     redirect("/");
-  }
+  };
 
   useEffect(() => {
-    const fetchToken = async () => {
-      const token = await getUserFromCookie();
-
-      if (token) {
-        setIsLogedin(true);
-      } else {
-        setIsLogedin(false);
-      }
-    };
-
-    fetchToken();
-  }, [isLogedin]);
+    const token = localStorage.getItem("token");
+    setIsLogedin(!!token);
+  }, []);
 
   return (
     <Flex
@@ -48,25 +39,24 @@ function Header() {
       </Link>
 
       <Flex gap={5} justify="flex-end" align="center">
-        <Link href="/campaign">
-          <Text>Mis campañas</Text>
-        </Link>
-
         {isLogedin ? (
           <>
             <Link href="/profile">
               <Text>Mi perfil</Text>
             </Link>
 
+            <Link href="/campaign">
+              <Text>Mis campañas</Text>
+            </Link>
+
             <Button bg="blue.600" onClick={logout}>
-            Cerrar sesion
+              Cerrar sesión
             </Button>
           </>
-          
         ) : (
           <>
             <Link href="/login">
-              <Text>Iniciar sesion</Text>
+              <Text>Iniciar sesión</Text>
             </Link>
 
             <Link href="/register">
@@ -78,4 +68,5 @@ function Header() {
     </Flex>
   );
 }
+
 export default Header;
