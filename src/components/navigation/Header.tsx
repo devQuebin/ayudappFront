@@ -14,7 +14,7 @@ function Header() {
     localStorage.removeItem("token");
     localStorage.removeItem("uid");
     setIsLogedin(false);
-    redirect("/");
+    window.location.href = "/";
   };
 
   useEffect(() => {

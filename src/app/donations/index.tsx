@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Box, Text, Spinner } from "@chakra-ui/react";
-import { getUidFromCookie } from "@/services/auth";
 import DonationHistory from "@/components/donations/DonationHistory";
 
 const DonationsPage = () => {
@@ -11,7 +10,7 @@ const DonationsPage = () => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const uid = await getUidFromCookie();
+        const uid = localStorage.getItem("uid")
         setUserId(uid);
       } catch (error) {
         console.error('Error loading user:', error);

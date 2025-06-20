@@ -1,14 +1,19 @@
-import { redirect } from "next/navigation"
-import { getUserFromCookie } from "@/services/auth"
+'use client'
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Container, Box, Text } from "@chakra-ui/react"
 import CampaignForm from "@/components/forms/CampaignForm"
 
-export default async function CreateCampaignPage() {
-  const token = await getUserFromCookie()
+export default function CreateCampaignPage() {
+  const router = useRouter()
 
-  if (!token) {
-    redirect("/login")
-  }
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      router.push("/login")
+    }
+  }, [router])
 
   return (
     <Container maxW="container.lg" py={10}>

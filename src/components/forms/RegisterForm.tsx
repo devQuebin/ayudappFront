@@ -14,6 +14,8 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 interface FormValues {
+  name: string
+  lastName: string
   email: string
   password: string
 }
@@ -28,16 +30,16 @@ export default function RegisterForm() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     setSuccessMessage(null)
     setErrorMessage(null)
 
     try {
-      registerUser(data.email, data.password)
-      setSuccessMessage("User registered successfully!")
-    } catch (error) {
-      console.log(error)
-      setErrorMessage("Failed to register user. Please try again.")
+      await registerUser(data.email, data.password, data.name, data.lastName)
+      setSuccessMessage("Usuario registrado correctamente.")
+    } catch (error: any) {
+      console.error(error)
+      setErrorMessage(error.message || "No se pudo registrar el usuario.")
     }
   })
 
@@ -49,15 +51,32 @@ export default function RegisterForm() {
         </Stack>
 
         <Fieldset.Content>
+          <Field.Root required invalid={!!errors.name}>
+            <Field.Label>Nombre <Field.RequiredIndicator /></Field.Label>
+            <Input
+              {...register("name", { required: "Este campo es obligatorio" })}
+              type="text"
+            />
+            <Field.ErrorText>{errors.name?.message}</Field.ErrorText>
+          </Field.Root>
+
+          <Field.Root required invalid={!!errors.lastName}>
+            <Field.Label>Apellido <Field.RequiredIndicator /></Field.Label>
+            <Input
+              {...register("lastName", { required: "Este campo es obligatorio" })}
+              type="text"
+            />
+            <Field.ErrorText>{errors.lastName?.message}</Field.ErrorText>
+          </Field.Root>
 
           <Field.Root required invalid={!!errors.email}>
             <Field.Label>Email <Field.RequiredIndicator /></Field.Label>
             <Input
               {...register("email", {
-                required: "This field is required",
+                required: "Este campo es obligatorio",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email address",
+                  message: "Correo inválido",
                 },
               })}
               type="email"
@@ -65,11 +84,11 @@ export default function RegisterForm() {
             <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
           </Field.Root>
 
-          <Field.Root required invalid={!!errors.password} className="relative">
+          <Field.Root required invalid={!!errors.password}>
             <Field.Label>Contraseña <Field.RequiredIndicator /></Field.Label>
             <Input
-              {...register("password", { required: "This field is required" })}
-              type={"password"}
+              {...register("password", { required: "Este campo es obligatorio" })}
+              type="password"
             />
             <Field.ErrorText>{errors.password?.message}</Field.ErrorText>
           </Field.Root>
@@ -92,7 +111,10 @@ export default function RegisterForm() {
 
         <Stack pt={6}>
           <Fieldset.HelperText>
-            Ya tiene cuenta? <Link href="/login"><Button>Iniciar Sesión</Button></Link>
+            ¿Ya tienes una cuenta?{" "}
+            <Link href="/login">
+              <Button>Iniciar Sesión</Button>
+            </Link>
           </Fieldset.HelperText>
         </Stack>
       </Fieldset.Root>

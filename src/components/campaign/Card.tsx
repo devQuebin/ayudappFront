@@ -145,17 +145,24 @@ const Card = ({
         </Text>
         <Text fontSize="sm" color="green.600" fontWeight="bold">
           Recaudado: ${totalRaised}
-        </Text>        <Progress.Root
-          value={(totalRaised / amountTarget) * 100}
-          size="sm"
-          colorPalette="green"
-        >
+        </Text>        
+          <Progress.Root
+            value={
+              amountTarget && amountTarget > 0
+                ? Math.min((totalRaised / amountTarget) * 100, 100)
+                : 0
+            }
+            size="sm"
+            colorPalette="green"
+          >
           <Progress.Track>
             <Progress.Range />
           </Progress.Track>
         </Progress.Root>
         <Text fontSize="xs" color="gray.500">
-          {((totalRaised / amountTarget) * 100).toFixed(1)}% completado
+          {amountTarget && amountTarget > 0
+            ? `${((totalRaised / amountTarget) * 100).toFixed(1)}% completado`
+            : "0% completado"}
         </Text>
         <Text fontSize="xs" color="gray.400">
           Creado el: {formatDate(createdAt!)}

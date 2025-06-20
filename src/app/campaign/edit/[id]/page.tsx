@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation"
-import { getUserFromCookie } from "@/services/auth"
 import { getCampaignById } from "@/services/actions"
 import CampaignForm from "@/components/forms/CampaignForm"
 import { Box, Container, Text } from "@chakra-ui/react"
 
 export default async function EditCampaignPage({ params }: { params: Promise<{ id: string }> }) {
-  const token = await getUserFromCookie()
+  const token = localStorage.getItem("token")
   const { id } = await params
 
   if (!token) {

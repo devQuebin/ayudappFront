@@ -17,5 +17,6 @@ export const login = async (email: string, password: string): Promise<void> => {
   const data = await response.json();
   // Guardar token en localStorage
   localStorage.setItem("token", data.token);
-  localStorage.setItem("uid", data.user.uid); // opcional si querés acceder al UID
+  localStorage.setItem("uid", data.user.uid); 
+  window.location.reload();
 };
