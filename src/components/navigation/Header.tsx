@@ -10,28 +10,38 @@ function Header() {
   const [hasDonations, setHasDonations] = useState(false)
 
   useEffect(() => {
+    if (typeof window === "undefined") return
+
     const token = localStorage.getItem("token")
     const uid = localStorage.getItem("uid")
 
     setIsLoggedIn(!!token)
 
-    const fetchDonations = async () => {
-      if (!uid) return
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donation/donor/${uid}`)
-        const data = await response.json()
-        if (data?.data?.length > 0) {
-          setHasDonations(true)
-        }
-      } catch (error) {
-        console.error("Error al verificar donaciones:", error)
-      }
-    }
-
     if (token && uid) {
-      fetchDonations()
+      fetchDonations(uid)
     }
   }, [])
+
+  const fetchDonations = async (uid: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donation/donor/${uid}`)
+      const data = await response.json()
+
+      console.log("Donaciones encontradas:", data)
+
+      if (Array.isArray(data.data) && data.data.length > 0) {
+        setHasDonations(true)
+      }
+    } catch (error) {
+      console.error("❌ Error al verificar donaciones:", error)
+    }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("uid")
+    window.location.href = "/"
+  }
 
   return (
     <Flex bg="blue.800" justify="space-between" p={4} color="white">
@@ -47,11 +57,7 @@ function Header() {
             {hasDonations && (
               <Link href="/donations"><Text>Historial de Donaciones</Text></Link>
             )}
-            <Button onClick={() => {
-              localStorage.removeItem("token")
-              localStorage.removeItem("uid")
-              window.location.href = "/"
-            }}>Cerrar sesión</Button>
+            <Button onClick={handleLogout}>Cerrar sesión</Button>
           </>
         ) : (
           <>

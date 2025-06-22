@@ -5,7 +5,7 @@ import CampaignForm from "@/components/forms/CampaignForm"
 import { Box, Container, Text } from "@chakra-ui/react"
 
 export default async function EditCampaignPage({ params }: { params: { id: string } }) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const token = cookieStore.get("token")?.value
 
   if (!token) {

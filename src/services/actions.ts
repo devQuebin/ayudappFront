@@ -79,16 +79,23 @@ export async function updateCampaign(campaignId: string, campaign: Campaign): Pr
     throw new Error("User not authenticated");
   }
 
-  campaign.status = campaign.status || "active";
+  const {
+    id,
+    createdAt,
+    updatedAt,
+    totalRaised,
+    donorCount,
+    ...campaignDataToSend
+  } = campaign;
 
-  const { id, createdAt, updatedAt, ...campaignDataToSend } = campaign;
-
+  // Validar tipos
   if (typeof campaignDataToSend.amountTarget === "string") {
     campaignDataToSend.amountTarget = parseFloat(campaignDataToSend.amountTarget);
   }
 
+  
   const response = await fetch(`${API_URL}/campaign/${campaignId}`, {
-    method: "PUT", //
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token.value}`
@@ -96,9 +103,11 @@ export async function updateCampaign(campaignId: string, campaign: Campaign): Pr
     body: JSON.stringify(campaignDataToSend)
   });
 
+  const responseText = await response.text();
+
   if (!response.ok) {
     throw new Error("Failed to update campaign");
   }
 
-  return response.json();
+  return JSON.parse(responseText);
 }

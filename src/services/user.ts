@@ -1,5 +1,7 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
+const token = localStorage.getItem("token");
+
 export const getUserData = async (uid: string) => {
   const response = await fetch(`${API_URL}/user/${uid}`)
   if (!response.ok) {
@@ -14,6 +16,7 @@ export const updateUserData = async (uid: string, data: { name: string, lastName
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify(data),
   })
@@ -24,10 +27,11 @@ export const updateUserData = async (uid: string, data: { name: string, lastName
 }
 
 export const updatePassword = async (uid: string, newPassword: string) => {
-  const response = await fetch(`${API_URL}/user/${uid}/password`, {
+  const response = await fetch(`${API_URL}/user/${uid}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify({ password: newPassword }),
   })
