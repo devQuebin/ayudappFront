@@ -1,72 +1,67 @@
-"use client";
+'use client'
 
-import { Button, Flex, Text, Image } from "@chakra-ui/react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import HeaderLogo from "../../../public/img/whitelogo.png";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react"
+import { Box, Button, Flex, Image, Text } from "@chakra-ui/react"
+import Link from "next/link"
+import HeaderLogo from "../../../public/img/whitelogo.png"
 
 function Header() {
-  const [isLogedin, setIsLogedin] = useState<boolean>(false);
-  
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("uid");
-    setIsLogedin(false);
-    window.location.href = "/";
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [hasDonations, setHasDonations] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLogedin(!!token);
-  }, []);
+    const token = localStorage.getItem("token")
+    const uid = localStorage.getItem("uid")
+
+    setIsLoggedIn(!!token)
+
+    const fetchDonations = async () => {
+      if (!uid) return
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donation/donor/${uid}`)
+        const data = await response.json()
+        if (data?.data?.length > 0) {
+          setHasDonations(true)
+        }
+      } catch (error) {
+        console.error("Error al verificar donaciones:", error)
+      }
+    }
+
+    if (token && uid) {
+      fetchDonations()
+    }
+  }, [])
 
   return (
-    <Flex
-      h="9vh"
-      w="100%"
-      justify="space-between"
-      align="center"
-      position="fixed"
-      px={{ base: 2, sm: 10, md: 20 }}
-      zIndex={1000}
-      border={1}
-      bg="blue.800"
-    >
+    <Flex bg="blue.800" justify="space-between" p={4} color="white">
       <Link href="/">
-        <Image src={HeaderLogo.src} h="8vmin" alt="AyudApp logo" />
+        <Image src={HeaderLogo.src} alt="Logo" height="40px" />
       </Link>
 
-      <Flex gap={5} justify="flex-end" align="center">
-        {isLogedin ? (
+      <Flex gap={4} align="center">
+        {isLoggedIn ? (
           <>
-            <Link href="/profile">
-              <Text>Mi perfil</Text>
-            </Link>
-
-            <Link href="/campaign">
-              <Text>Mis campañas</Text>
-            </Link>
-
-            <Button bg="blue.600" onClick={logout}>
-              Cerrar sesión
-            </Button>
+            <Link href="/profile"><Text>Mi perfil</Text></Link>
+            <Link href="/campaign"><Text>Campañas</Text></Link>
+            {hasDonations && (
+              <Link href="/donations"><Text>Historial de Donaciones</Text></Link>
+            )}
+            <Button onClick={() => {
+              localStorage.removeItem("token")
+              localStorage.removeItem("uid")
+              window.location.href = "/"
+            }}>Cerrar sesión</Button>
           </>
         ) : (
           <>
-            <Link href="/login">
-              <Text>Iniciar sesión</Text>
-            </Link>
-
-            <Link href="/register">
-              <Button>Crear cuenta</Button>
-            </Link>
+            <Link href="/login"><Text>Iniciar sesión</Text></Link>
+            <Link href="/register"><Button>Crear cuenta</Button></Link>
           </>
         )}
       </Flex>
     </Flex>
-  );
+  )
 }
 
-export default Header;
+export default Header

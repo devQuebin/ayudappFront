@@ -88,7 +88,7 @@ export async function updateCampaign(campaignId: string, campaign: Campaign): Pr
   }
 
   const response = await fetch(`${API_URL}/campaign/${campaignId}`, {
-    method: "POST",
+    method: "PUT", //
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token.value}`

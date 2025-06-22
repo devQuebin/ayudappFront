@@ -1,4 +1,4 @@
-"use server"
+
 import {
   CreateDonationRequest,
   CreateDonationAPIRequest,
@@ -11,48 +11,43 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export const createDonation = async (
   donationData: CreateDonationRequest,
-  userId?: string
+  userId: string | null // <-- hacerlo obligatorio o pasarlo bien desde el frontend
 ): Promise<DonationResponse> => {
-  const cookieStore = await cookies()
-  const token = cookieStore.get("token")
+  const token = localStorage.getItem("token");
 
   if (!token) {
-    throw new Error("Unauthenticated: No token found in cookies")
+    throw new Error("Unauthenticated: No token found");
   }
 
-  try {
-    console.log("🎯 Creating donation with data:", donationData)
-
-    // Transform frontend data to backend API format
-    const apiRequest: CreateDonationAPIRequest = {
-      donorId: donationData.isAnonymous ? "anonymous" : userId || "anonymous",
-      campaignId: donationData.campaignId,
-      date: new Date().toISOString(),
-      amount: donationData.amount,
-    }
-
-    const response = await fetch(`${API_URL}/donation`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`,
-      },
-      body: JSON.stringify(apiRequest),
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const result = await response.json()
-    console.log("✅ Donation created successfully:", result)
-
-    return result
-  } catch (error) {
-    console.error("❌ Error creating donation:", error)
-    throw error
+  // Asegurate que userId no sea null
+  const donorId = donationData.isAnonymous ? "anonymous" : userId;
+  if (!donorId) {
+    throw new Error("User ID is required to create donation");
   }
-}
+
+  const apiRequest: CreateDonationAPIRequest = {
+    donorId,
+    campaignId: donationData.campaignId,
+    date: new Date().toISOString(),
+    amount: donationData.amount,
+  };
+
+  const response = await fetch(`${API_URL}/donation`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(apiRequest),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  return result;
+};
 
 export const getDonationsByUser = async (userId: string) => {
   try {
@@ -75,7 +70,7 @@ export const getDonationsByUser = async (userId: string) => {
       result.data?.filter(
         (donation: BackendDonation) => donation.donorId === userId
       ) || []
-
+    
     return { data: userDonations }
   } catch (error) {
     console.error("❌ Error fetching user donations:", error)

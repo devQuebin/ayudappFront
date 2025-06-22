@@ -15,6 +15,8 @@ export const login = async (email: string, password: string): Promise<void> => {
   }
 
   const data = await response.json();
+  document.cookie = `token=${data.token}; path=/;`;
+  document.cookie = `uid=${data.user.uid}; path=/;`;
   // Guardar token en localStorage
   localStorage.setItem("token", data.token);
   localStorage.setItem("uid", data.user.uid); 

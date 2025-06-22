@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation" // ✅ se agregó esta línea
 
 interface FormValues {
   name: string
@@ -29,6 +30,7 @@ export default function RegisterForm() {
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const router = useRouter() // ✅ se agregó esta línea
 
   const onSubmit = handleSubmit(async (data) => {
     setSuccessMessage(null)
@@ -37,6 +39,12 @@ export default function RegisterForm() {
     try {
       await registerUser(data.email, data.password, data.name, data.lastName)
       setSuccessMessage("Usuario registrado correctamente.")
+
+      // ✅ Redirigir automáticamente a /login después de un pequeño delay
+      setTimeout(() => {
+        router.push("/login")
+      }, 1000)
+
     } catch (error: any) {
       console.error(error)
       setErrorMessage(error.message || "No se pudo registrar el usuario.")
