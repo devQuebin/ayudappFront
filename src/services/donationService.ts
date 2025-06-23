@@ -1,4 +1,3 @@
-
 import {
   CreateDonationRequest,
   CreateDonationAPIRequest,
@@ -13,16 +12,16 @@ export const createDonation = async (
   donationData: CreateDonationRequest,
   userId: string | null // <-- hacerlo obligatorio o pasarlo bien desde el frontend
 ): Promise<DonationResponse> => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token")
 
   if (!token) {
-    throw new Error("Unauthenticated: No token found");
+    throw new Error("Unauthenticated: No token found")
   }
 
   // Asegurate que userId no sea null
-  const donorId = donationData.isAnonymous ? "anonymous" : userId;
+  const donorId = userId
   if (!donorId) {
-    throw new Error("User ID is required to create donation");
+    throw new Error("User ID is required to create donation")
   }
 
   const apiRequest: CreateDonationAPIRequest = {
@@ -30,7 +29,7 @@ export const createDonation = async (
     campaignId: donationData.campaignId,
     date: new Date().toISOString(),
     amount: donationData.amount,
-  };
+  }
 
   const response = await fetch(`${API_URL}/donation`, {
     method: "POST",
@@ -39,15 +38,15 @@ export const createDonation = async (
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(apiRequest),
-  });
+  })
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(`HTTP error! status: ${response.status}`)
   }
 
-  const result = await response.json();
-  return result;
-};
+  const result = await response.json()
+  return result
+}
 
 export const getDonationsByUser = async (userId: string) => {
   try {
@@ -70,7 +69,7 @@ export const getDonationsByUser = async (userId: string) => {
       result.data?.filter(
         (donation: BackendDonation) => donation.donorId === userId
       ) || []
-    
+
     return { data: userDonations }
   } catch (error) {
     console.error("❌ Error fetching user donations:", error)

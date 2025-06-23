@@ -114,7 +114,7 @@ export default function PaymentModal({ isOpen, onClose, campaignId, campaignName
         }
       };
 
-      await createDonation(donationData, userId || undefined);
+      await createDonation(donationData, userId!);
 
       setTransactionId(paymentResult.transactionId);
       setShowSuccess(true);

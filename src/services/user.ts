@@ -1,6 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("token")
 
 export const getUserData = async (uid: string) => {
   const response = await fetch(`${API_URL}/user/${uid}`)
@@ -11,12 +11,15 @@ export const getUserData = async (uid: string) => {
   return await response.json()
 }
 
-export const updateUserData = async (uid: string, data: { name: string, lastName: string }) => {
+export const updateUserData = async (
+  uid: string,
+  data: { name: string; lastName: string }
+) => {
   const response = await fetch(`${API_URL}/user/${uid}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })
@@ -31,7 +34,7 @@ export const updatePassword = async (uid: string, newPassword: string) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ password: newPassword }),
   })
@@ -39,31 +42,28 @@ export const updatePassword = async (uid: string, newPassword: string) => {
     const error = await response.json()
     throw new Error(error.message || "Error al cambiar la contraseña")
   }
-
-  
 }
 
-
 export const getCurrentUser = async () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token")
+  const uid = localStorage.getItem("uid")
 
-  if (!token) {
-    throw new Error("Token no encontrado");
+  if (!uid) {
+    throw new Error("User no encontrado")
   }
 
-  const response = await fetch(`${API_URL}/user/me`, {
+  const response = await fetch(`${API_URL}/user/${uid}`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  console.log(`Obteniendo response con UID: ${await response.json()}`)
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "No se pudo obtener el usuario");
+    const error = await response.json()
+    throw new Error(error.message || "No se pudo obtener el usuario")
   }
 
-  return await response.json(); // { uid, email, name, lastName }
-};
-
-
+  return await response.json() // { uid, email, name, lastName }
+}

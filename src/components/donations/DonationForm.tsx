@@ -121,7 +121,7 @@ export default function DonationForm({
         campaignId,
         amount: parseInt(data.amount),
         isAnonymous,
-        donorName: isAnonymous ? undefined : data.donorName,
+        donorName: data.donorName,
         message: data.message,
         paymentData: {
           cardNumber: data.cardNumber,
