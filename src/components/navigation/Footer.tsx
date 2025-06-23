@@ -44,7 +44,7 @@ function Footer() {
       >
         <Text color="white">Sobre nosotros</Text>
         <Text color="white">
-          <Link href="/faqs">FAQ</Link>
+          <Link href="/faq">FAQ</Link>
         </Text>
         <Text color="white">
           <Link href="/contactus">Contactanos</Link>

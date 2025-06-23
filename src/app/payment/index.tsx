@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Button, Text, Spinner, VStack } from "@chakra-ui/react";
-import { getUidFromCookie } from "@/services/auth";
 import PaymentModal from "@/components/donations/PaymentModal";
 
 const PaymentPage = () => {
@@ -17,7 +16,7 @@ const PaymentPage = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const uid = await getUidFromCookie();
+        const uid = localStorage.getItem("uid")
         if (!uid) {
           router.push("/login?message=Debes iniciar sesión para realizar una donación");
           return;

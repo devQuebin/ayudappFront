@@ -1,6 +1,6 @@
 'use client'
 
-import { login } from "@/services/auth"
+import { login } from "@/services/login"
 import {
   Button,
   Field,
@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -26,26 +26,30 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<FormValues>()
   const router = useRouter()
-
+  
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onSubmit = handleSubmit(async (data) => {
     setSuccessMessage(null)
     setErrorMessage(null)
+  
     try {
+      // Login con localStorage
       await login(data.email, data.password)
-      setSuccessMessage("Login successful!")
+
+      setSuccessMessage("Inicio de sesión exitoso")
       setErrorMessage(null)
-      // Force page reload while navigating
+
       router.push("/")
       window.location.href = "/"
     } catch (error) {
-      console.log(error)
-      setErrorMessage("Login failed. Please check your credentials.")
+      console.error("[Login error]", error)
+      setErrorMessage("Login fallido. Verifica tus credenciales.")
       setSuccessMessage(null)
     }
   })
+
 
   return (
     <form onSubmit={onSubmit}>

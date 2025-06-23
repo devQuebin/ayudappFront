@@ -1,19 +1,21 @@
 import { redirect } from "next/navigation"
-import { getUserFromCookie } from "@/services/auth"
+import { cookies } from "next/headers"
 import { getCampaignById } from "@/services/actions"
 import CampaignForm from "@/components/forms/CampaignForm"
 import { Box, Container, Text } from "@chakra-ui/react"
 
-export default async function EditCampaignPage({ params }: { params: Promise<{ id: string }> }) {
-  const token = await getUserFromCookie()
-  const { id } = await params
+export default async function EditCampaignPage({ params }: { params: { id: string } }) {
+  const cookieStore = cookies()
+  const token = cookieStore.get("token")?.value
 
   if (!token) {
     redirect("/login")
   }
 
-  let campaign;
-  let error = null;
+  const { id } = params
+
+  let campaign
+  let error = null
 
   try {
     campaign = await getCampaignById(id)
@@ -48,4 +50,3 @@ export default async function EditCampaignPage({ params }: { params: Promise<{ i
     </Container>
   )
 }
-

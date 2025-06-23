@@ -132,7 +132,10 @@ export default function DonationForm({
         }
       };
 
-      const result = await createDonation(donationData);
+      const uid = typeof window !== "undefined" ? localStorage.getItem("uid") : null;
+
+
+      const result = await createDonation(donationData, uid);
 
       if (result.success) {
         setSuccessMessage(`¡Gracias por tu donación de $${data.amount} a ${campaignName}!`);
