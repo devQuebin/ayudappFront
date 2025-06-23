@@ -58,7 +58,7 @@ export const getCurrentUser = async () => {
       Authorization: `Bearer ${token}`,
     },
   })
-  console.log(`Obteniendo response con UID: ${await response.json()}`)
+  console.log(`Obteniendo response con UID: ${response}`)
 
   if (!response.ok) {
     const error = await response.json()

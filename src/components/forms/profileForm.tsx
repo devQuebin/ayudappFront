@@ -114,7 +114,7 @@ export default function ProfileForm() {
             {userCampaigns.map((campaign: any) => (
               <Button
                 as="a"
-                href={`/campaign/edit/${campaign.id}`} 
+                href={`/campaign/${campaign.id}`}
                 variant="outline"
                 key={campaign.id}
                 justifyContent="flex-start"

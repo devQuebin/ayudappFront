@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Box, Button, Center, Flex, Heading, Spinner, Text, Stack } from "@chakra-ui/react"
-import Link from "next/link"
+import { Box, Center, Flex, Heading, Spinner, Text, Stack } from "@chakra-ui/react"
 
 interface Donation {
   id: string
@@ -15,6 +14,7 @@ export default function DonationHistoryPage() {
   const [donations, setDonations] = useState<Donation[]>([])
   const [loading, setLoading] = useState(true)
   const [uid, setUid] = useState<string | null>(null)
+  console.log("UID:", uid)
 
   useEffect(() => {
     const fetchData = async () => {

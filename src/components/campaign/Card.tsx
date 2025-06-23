@@ -26,7 +26,7 @@ const Card = ({
   images,
   categories
 }: CardProps) => {
-  console.log("images", images); const [isOwner, setIsOwner] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const { open, onOpen, onClose } = useDisclosure();
   const { open: donationOpen, onOpen: onDonationOpen, onClose: onDonationClose } = useDisclosure();
   // Default image path
@@ -145,16 +145,16 @@ const Card = ({
         </Text>
         <Text fontSize="sm" color="green.600" fontWeight="bold">
           Recaudado: ${totalRaised}
-        </Text>        
-          <Progress.Root
-            value={
-              amountTarget && amountTarget > 0
-                ? Math.min((totalRaised / amountTarget) * 100, 100)
-                : 0
-            }
-            size="sm"
-            colorPalette="green"
-          >
+        </Text>
+        <Progress.Root
+          value={
+            amountTarget && amountTarget > 0
+              ? Math.min((totalRaised / amountTarget) * 100, 100)
+              : 0
+          }
+          size="sm"
+          colorPalette="green"
+        >
           <Progress.Track>
             <Progress.Range />
           </Progress.Track>

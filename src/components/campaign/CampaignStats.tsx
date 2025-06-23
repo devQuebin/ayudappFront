@@ -13,7 +13,7 @@ interface CampaignStatistics {
   donorCount: number;
   anonymousDonorCount: number;
   totalDonations: number;
-  donations: any[];
+  donations: unknown[];
 }
 
 const CampaignStats = ({ campaignId, amountTarget }: CampaignStatsProps) => {
